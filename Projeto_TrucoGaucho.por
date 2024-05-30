@@ -1,12 +1,11 @@
 programa {
-  inclua biblioteca Util --> u
   funcao inicio() {
     exibirTituloVisual()
 
-    
+
     exibirVisualMao()
   }
-
+  //Função para exibição do layout do titulo no menu principal.
   funcao exibirTituloVisual(){
     escreva(" ########   ######   ##    ##    ####    #####              ####     ##     ##   ##    ####   ##   ##   #####\n")
     escreva(" #  ##  #   ##  ##   ##    ##   ##  ##  ##   ##            ##  ##   ####    ##   ##   ##  ##  ##   ##  ##   ##\n")
@@ -16,7 +15,7 @@ programa {
     escreva("    ##      ##  ##   ##    ##   ##  ##  ##   ##            ##  ##  ##  ##   ##   ##   ##  ##  ##   ##  ##   ##\n")
     escreva("  ######    #### ##    #####     ####    #####              #####  ##  ##    #####     ####   ##   ##   #####\n")
   }
-
+  //Função para a exibição de layout visual do jogo da mão dos Player.
   funcao exibirVisualMao(){
    escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
    escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
