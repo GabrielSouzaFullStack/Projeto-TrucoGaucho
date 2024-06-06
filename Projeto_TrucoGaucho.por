@@ -172,5 +172,6 @@ programa {
         repitacaoCarta[carta_sorteada] = verdadeiro
       }
     }
+  }
+}
 
-  
