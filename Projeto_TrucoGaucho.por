@@ -1,11 +1,11 @@
 programa {
+  //Importando a biblioteca Util
   inclua biblioteca Util --> u
+  //Declaração das variaves de escopo global.
   cadeia cartasBaralho[40]
-  inteiro pontosCartas[40]
   logico repitacaoCarta[40]
   cadeia maoJogadorA[3], maoJogadorB[3]
   inteiro pontosJogadorA, pontosJogadorB
-
 
   funcao inicio() {
      inicializarBaralho()
@@ -23,49 +23,53 @@ programa {
     
     //chamando a função menu incial.
     menuInicial()
+    jogadas(maoJogadorA, maoJogadorB)
+
   }
 
-  //função para chamar o menu.
-  funcao menuInicial(){
-    menu()
-  }
+  // função para criar lógica de jogadas para os dois jogadores.
+  funcao jogadas(cadeia maoJogadorA[], cadeia maoJogadorB[]){
+    inteiro escolhaDaCarta
+    logico vezDeJogar = verdadeiro
+    inteiro cartasRestantesJogadorA = 3
+    inteiro cartasRestantesJogadorB = 3
 
-  //função do menu para controlar o que o jogador deseja fazer.
-  funcao menu(){
-    inteiro num, menu
+    // laço de repetição para continuar até que ambos os jogadores tenham jogado todas as suas cartas.
+    enquanto(cartasRestantesJogadorA > 0 ou cartasRestantesJogadorB > 0){
+      se(vezDeJogar e cartasRestantesJogadorA > 0){
+        escreva("\nVez do jogador A. Sua mão é essa:\n")
+        escreva(maoJogadorA, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
+        leia(escolhaDaCarta)
 
-    faca{
-      escreva("::::: Jogo de truco :::::\n1. Iniciar partida.\n0. Sair.\n\n")
-      leia(num)
+        // laço de repetição para garantir que a carta certa seja jogada.
+        enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorA[escolhaDaCarta - 1] == "      "){
+          escreva("Carta inválida! Tente outra:\n")
+          leia(escolhaDaCarta)
+        }
 
-      escolha(num){
-        caso 1: 
-          escreva("Iniciando a partida...\n")
+      escreva("\nA carta ", maoJogadorA[escolhaDaCarta - 1], " está na mesa!\n")
+      maoJogadorA[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
+      cartasRestantesJogadorA-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
 
-          escreva("1. Receber as cartas.\n2. Ver pontuação.\n")
-          leia(menu)
+      vezDeJogar = falso
+        
+      // Vez do outro jogador.   
+      }senao se(cartasRestantesJogadorB > 0){
+        escreva("\nVez do jogador B. Sua mão é essa:\n")
+        escreva(maoJogadorB, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
+        leia(escolhaDaCarta)
 
-          //Com este escolha o usuário pode escolher entre ver sua mão de cartas ou ver sua pontuação.
-          escolha(menu){
-            caso 1: 
-              escreva("cartas\n\n")
-            pare
+        enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorB[escolhaDaCarta - 1] == "      "){
+          escreva("Carta inválida! Tente outra:\n")
+          leia(escolhaDaCarta)
+        }
 
-            caso 2:
-              escreva("Pontuação.\n\n")
-            pare
+      escreva("\nA carta ", maoJogadorB[escolhaDaCarta - 1], " está na mesa!\n")
+      maoJogadorB[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
+      cartasRestantesJogadorB-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
 
-            caso contrario:
-              escreva("Opção inválida!\n\n")
-          } 
-        pare
+      vezDeJogar = verdadeiro
 
-        caso 0:
-
-        pare
-
-        caso contrario:
-          escreva("Opção inválida!\n\n")
       }
     }enquanto(num != 0)
 
