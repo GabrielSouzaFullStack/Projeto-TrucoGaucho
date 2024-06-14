@@ -8,27 +8,17 @@ programa {
   inteiro pontosJogadorA, pontosJogadorB
 
   funcao inicio() {
-     inicializarBaralho()
-     atribuirPontos()
-     destribuirCartas(maoJogadorA, cartasBaralho, pontosJogadorA)
-     destribuirCartas(maoJogadorB, cartasBaralho, pontosJogadorB)
-     escreva("Mão do Jogador A: ", maoJogadorA[0]," \t ", maoJogadorA[1]," \t ", maoJogadorA[2], "\n")
-     escreva("Pontos Jogador A: ",pontosJogadorA, "\n")
-     escreva("\nMão do Jogador B: ", maoJogadorB[0]," \t ", maoJogadorB[1]," \t ", maoJogadorB[2], "\n")
-     escreva("Pontos Jogador B: ",pontosJogadorB, "\n")
-    
-
-    exibirTituloVisual()
-    exibirVisualMao()
+    //exibirVisualMao()
     
     //chamando a função menu incial.
     menuInicial()
-    jogadas(maoJogadorA, maoJogadorB)
-
+    
   }
 
   // função para criar lógica de jogadas para os dois jogadores.
-  funcao jogadas(cadeia maoJogadorA[], cadeia maoJogadorB[]){
+  funcao jogadas(){
+    destribuirCartas(maoJogadorA)
+    destribuirCartas(maoJogadorB)
     inteiro escolhaDaCarta
     logico vezDeJogar = verdadeiro
     inteiro cartasRestantesJogadorA = 3
@@ -75,7 +65,8 @@ programa {
 
   }
 
-    funcao menuInicial(){
+  funcao menuInicial(){
+    exibirTituloVisual()
     menu()
   }
 
@@ -97,7 +88,7 @@ programa {
           //Com este escolha o usuário pode escolher entre ver sua mão de cartas ou ver sua pontuação.
           escolha(menu){
             caso 1: 
-              escreva("cartas\n\n")
+             jogadas(maoJogadorA, maoJogadorB)
             pare
 
             caso 2:
@@ -123,11 +114,14 @@ programa {
   funcao exibirTituloVisual(){
     escreva(" ########   ######   ##    ##    ####    #####              ####     ##     ##   ##    ####   ##   ##   #####\n")
     escreva(" #  ##  #   ##  ##   ##    ##   ##  ##  ##   ##            ##  ##   ####    ##   ##   ##  ##  ##   ##  ##   ##\n")
+    u.aguarde(500)
     escreva("    ##      ##  ##   ##    ##  ##       ##   ##           ##       ##  ##   ##   ##  ##       ##   ##  ##   ##\n")
     escreva("    ##      #####    ##    ##  ##       ##   ##           ##       ##  ##   ##   ##  ##       #######  ##   ##\n")
+    u.aguarde(500)
     escreva("    ##      ## ##    ##    ##  ##       ##   ##           ##  ###  ######   ##   ##  ##       ##   ##  ##   ##\n")
     escreva("    ##      ##  ##   ##    ##   ##  ##  ##   ##            ##  ##  ##  ##   ##   ##   ##  ##  ##   ##  ##   ##\n")
     escreva("  ######    #### ##    #####     ####    #####              #####  ##  ##    #####     ####   ##   ##   #####\n")
+    u.aguarde(500)
   }
   
   //Função para a exibição de layout visual do jogo da mão dos Player.
@@ -253,9 +247,10 @@ programa {
   }
 
   //função para distribuição das cartasBaralho para os jogadores, sem destribuir para mãos que já possuem cartas.
-  funcao destribuirCartas(cadeia cartasBaralho[], cadeia maoJogador[], inteiro &somaPontos){
-    inteiro carta_sorteada
-    somaPontos = 0
+ funcao destribuirCartas(cadeia maoJogador[]){
+  inicializarBaralho()
+  inteiro carta_sorteada
+
    
     para(inteiro i=0; i<3; i++){
       carta_sorteada = u.sorteia(0, 39)
@@ -264,9 +259,10 @@ programa {
         i--
       }senao{
         // Atribui o nome da carta ao vetor de mão do jogador.
-        cartasBaralho[i] = maoJogador[carta_sorteada]
-        somaPontos += pontosCartas[carta_sorteada]
+        maoJogador[i] = cartasBaralho[carta_sorteada]
         repitacaoCarta[carta_sorteada] = verdadeiro
       }
     }
+
   }
+}
