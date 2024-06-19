@@ -3,9 +3,10 @@ programa {
   inclua biblioteca Util --> u
   //Declaração das variaves de escopo global.
   cadeia cartasBaralho[40]
+  inteiro pontosCartas[40]
   logico repitacaoCarta[40]
   cadeia maoJogadorA[3], maoJogadorB[3]
-  inteiro pontosJogadorA, pontosJogadorB
+  inteiro pontosJogadorA = 0, pontosJogadorB = 0
 
   funcao inicio() {
     //exibirVisualMao()
@@ -17,6 +18,7 @@ programa {
 
   // função para criar lógica de jogadas para os dois jogadores.
   funcao jogadas(){
+    atribuirPontos()
     destribuirCartas(maoJogadorA)
     destribuirCartas(maoJogadorB)
     inteiro escolhaDaCarta
@@ -38,8 +40,11 @@ programa {
         }
 
       escreva("\nA carta ", maoJogadorA[escolhaDaCarta - 1], " está na mesa!\n")
+      pontosJogadorA = pontosJogadorA + obterPontosDaCarta(maoJogadorA[escolhaDaCarta - 1])
       maoJogadorA[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
       cartasRestantesJogadorA-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
+      
+      //pontosJogadorA = maoJogadorA[escolhaDaCarta]
 
       vezDeJogar = falso
         
@@ -55,8 +60,10 @@ programa {
         }
 
       escreva("\nA carta ", maoJogadorB[escolhaDaCarta - 1], " está na mesa!\n")
+      pontosJogadorB = pontosJogadorB + obterPontosDaCarta(maoJogadorB[escolhaDaCarta - 1])
       maoJogadorB[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
       cartasRestantesJogadorB-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
+
 
       vezDeJogar = verdadeiro
 
@@ -92,7 +99,10 @@ programa {
             pare
 
             caso 2:
-              escreva("Pontuação.\n\n")
+              atribuirPontos()
+              escreva("Pontos do jogador A: ", pontosJogadorA, "\n")
+              escreva("Pontos do jogador B: ", pontosJogadorB, "\n")
+              
             pare
 
             caso contrario:
@@ -125,33 +135,33 @@ programa {
   }
   
   //Função para a exibição de layout visual do jogo da mão dos Player.
-  funcao exibirVisualMao(){
-   escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                            %&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						%&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&&&&  ..                             						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&&&..*ˎˎ***.                             					&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&&&..*ˎ.ˎ/)*ˎ.                                      %&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&ˎ.....*))*ˎ.                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&#....ˎ/)*ˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&&....ˎˎ/#ˎˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&&&...ˎ*/)#...&&                        	  						%&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&&#...ˎ*/)//.&&&&                      		  						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&&&....ˎ//)))&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&&&....ˎ*//))&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&&&....ˎˎ///))&&&&&&&&&                          	 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&&&&&....ˎˎ**/))&&&&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&)#&...*ˎ./)/#))&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-   escreva( "&&&.....ˎˎˎ*/))#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  }
+  // funcao exibirVisualMao(){
+  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                            %&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						%&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&  ..                             						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&&&..ˎˎ.                             					&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&&&..*ˎ.ˎ/)*ˎ.                                      %&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&ˎ.....*))*ˎ.                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&#....ˎ/)*ˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&&....ˎˎ/#ˎˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&&&...ˎ*/)#...&&                        	  						%&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&&#...ˎ*/)//.&&&&                      		  						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&&&....ˎ//)))&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&&&....ˎ*//))&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&&&....ˎˎ///))&&&&&&&&&                          	 						&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&&&&&....ˎˎ**/))&&&&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&)#&...*ˎ./)/#))&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  //  escreva( "&&&.....ˎˎˎ*/))#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
+  // }
   
   //função para inicializar o baralho para a distribuição das cartas para os jogadores A e B.
   funcao inicializarBaralho(){
@@ -203,7 +213,8 @@ programa {
   }
 
   //função para atribuir valor de tipo inteiro ao vetor de uma string.
-  funcao atribuirPontos(){
+  funcao atribuirPontos (){
+
     pontosCartas[0] = 28
     pontosCartas[1] = 29
     pontosCartas[2] = 30
@@ -246,8 +257,17 @@ programa {
     pontosCartas[39] = 37
   }
 
+  funcao inteiro obterPontosDaCarta(cadeia carta){
+    para(inteiro i=0; i<40; i++){
+      se(cartasBaralho[i] == carta){
+        retorne pontosCartas[i]
+      }
+    }
+    retorne 0
+  }
+
   //função para distribuição das cartasBaralho para os jogadores, sem destribuir para mãos que já possuem cartas.
- funcao destribuirCartas(cadeia maoJogador[]){
+ funcao destribuirCartas(cadeia maoJogador[] ){
   inicializarBaralho()
   inteiro carta_sorteada
 
@@ -261,8 +281,9 @@ programa {
         // Atribui o nome da carta ao vetor de mão do jogador.
         maoJogador[i] = cartasBaralho[carta_sorteada]
         repitacaoCarta[carta_sorteada] = verdadeiro
-      }
-    }
+      }
+    }
 
-  }
+  }
+
 }
