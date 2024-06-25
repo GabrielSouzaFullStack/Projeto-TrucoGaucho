@@ -1,75 +1,129 @@
 programa {
   //Importando a biblioteca Util
   inclua biblioteca Util --> u
-  //Declaração das variaves de escopo global.
+  //Declaração das variáveis de escopo global.
   cadeia cartasBaralho[40]
   inteiro pontosCartas[40]
   logico repitacaoCarta[40]
   cadeia maoJogadorA[3], maoJogadorB[3]
   inteiro pontosJogadorA = 0, pontosJogadorB = 0
+  inteiro rodadasGanhasJogadorB = 0, rodadasGanhasJogadorA = 0
+  inteiro partidasGanhasJogadorA = 0
+  inteiro partidasGanhasJogadorB = 0
+  logico iniciaJogada = verdadeiro // Definição da variável que determina qual jogador começará jogando na próxima partida.
 
   funcao inicio() {
-    //exibirVisualMao()
-    
     //chamando a função menu incial.
     menuInicial()
-    
   }
 
   // função para criar lógica de jogadas para os dois jogadores.
   funcao jogadas(){
     atribuirPontos()
-    destribuirCartas(maoJogadorA)
-    destribuirCartas(maoJogadorB)
-    inteiro escolhaDaCarta
-    logico vezDeJogar = verdadeiro
-    inteiro cartasRestantesJogadorA = 3
-    inteiro cartasRestantesJogadorB = 3
+    pontosJogadorA = 0
+    pontosJogadorB = 0
 
-    // laço de repetição para continuar até que ambos os jogadores tenham jogado todas as suas cartas.
-    enquanto(cartasRestantesJogadorA > 0 ou cartasRestantesJogadorB > 0){
-      se(vezDeJogar e cartasRestantesJogadorA > 0){
-        escreva("\nVez do jogador A. Sua mão é essa:\n")
-        escreva(maoJogadorA, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
-        leia(escolhaDaCarta)
+    para(inteiro rodada=0; rodada<= 2; rodada++){
+      escreva("\n--- Partidas ", rodada + 1, " ---\n\n")
+ 
+      destribuirCartas(maoJogadorA)
+      destribuirCartas(maoJogadorB)
 
-        // laço de repetição para garantir que a carta certa seja jogada.
-        enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorA[escolhaDaCarta - 1] == "      "){
-          escreva("Carta inválida! Tente outra:\n")
-          leia(escolhaDaCarta)
+      inteiro escolhaDaCarta
+      logico vezDeJogar = iniciaJogada
+      inteiro cartasRestantesJogadorA = 3
+      inteiro cartasRestantesJogadorB = 3
+      inteiro terminarPartida = 0
+      logico jogada = verdadeiro
+
+      enquanto(terminarPartida < 12 e jogada == verdadeiro){
+        // laço de repetição para continuar até que ambos os jogadores tenham jogado todas as suas cartas.
+        enquanto(cartasRestantesJogadorA > 0 ou cartasRestantesJogadorB > 0){
+          se(vezDeJogar e cartasRestantesJogadorA > 0){
+            se(partidasGanhasJogadorA >= 0 e rodadasGanhasJogadorA >= 0){
+              escreva("Mão Jogador A\n")
+              escreva("Partidas ganhas: ",partidasGanhasJogadorA, "\n")
+              
+              escreva("Mão Jogador B\n")
+              escreva("Partidas ganhas: ",partidasGanhasJogadorB, "\n")
+              
+            }
+            escreva("Vez do jogador A. Sua mão é essa:\n")
+            escreva(maoJogadorA, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
+            leia(escolhaDaCarta)
+
+            // laço de repetição para garantir que a carta certa seja jogada.
+            enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorA[escolhaDaCarta - 1] == "      "){
+              escreva("Carta inválida! Tente outra:\n")
+              leia(escolhaDaCarta)
+            }
+
+          escreva("\nA carta ", maoJogadorA[escolhaDaCarta - 1], " está na mesa!\n")
+          pontosJogadorA = pontosJogadorA + obterPontosDaCarta(maoJogadorA[escolhaDaCarta - 1])
+          maoJogadorA[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
+          cartasRestantesJogadorA-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
+
+          vezDeJogar = falso
+          
+          // Vez do outro jogador.   
+          }senao se(cartasRestantesJogadorB > 0){
+            se(partidasGanhasJogadorB >= 0 e rodadasGanhasJogadorB <= 0){
+              escreva("Mão Jogador B\n")
+              escreva("Partidas ganhas: ",partidasGanhasJogadorB, "\n")
+             
+              escreva("Mão Jogador A\n")
+              escreva("Partidas ganhas: ",partidasGanhasJogadorA, "\n")
+             
+            }
+            escreva("Vez do jogador B. Sua mão é essa:\n")
+            escreva(maoJogadorB, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
+            leia(escolhaDaCarta)
+
+            enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorB[escolhaDaCarta - 1] == "      "){
+              escreva("Carta inválida! Tente outra:\n")
+              leia(escolhaDaCarta)
+            }
+
+          escreva("\nA carta ", maoJogadorB[escolhaDaCarta - 1], " está na mesa!\n")
+          pontosJogadorB = pontosJogadorB + obterPontosDaCarta(maoJogadorB[escolhaDaCarta - 1])
+          maoJogadorB[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
+          cartasRestantesJogadorB-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
+
+
+          vezDeJogar = verdadeiro
+
+          }
         }
 
-      escreva("\nA carta ", maoJogadorA[escolhaDaCarta - 1], " está na mesa!\n")
-      pontosJogadorA = pontosJogadorA + obterPontosDaCarta(maoJogadorA[escolhaDaCarta - 1])
-      maoJogadorA[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
-      cartasRestantesJogadorA-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
-      
-      //pontosJogadorA = maoJogadorA[escolhaDaCarta]
-
-      vezDeJogar = falso
-        
-      // Vez do outro jogador.   
-      }senao se(cartasRestantesJogadorB > 0){
-        escreva("\nVez do jogador B. Sua mão é essa:\n")
-        escreva(maoJogadorB, "\nQual deseja jogar?\nCarta 1, 2 ou 3: ")
-        leia(escolhaDaCarta)
-
-        enquanto(escolhaDaCarta < 1 ou escolhaDaCarta > 3 ou maoJogadorB[escolhaDaCarta - 1] == "      "){
-          escreva("Carta inválida! Tente outra:\n")
-          leia(escolhaDaCarta)
+        se(pontosJogadorA > pontosJogadorB){
+          rodadasGanhasJogadorA ++
+          iniciaJogada = verdadeiro // Jogador A ganhou a jogada, começa jogando na próxima Rodada.
+        }senao{
+          rodadasGanhasJogadorB ++
+          iniciaJogada = falso // Jogador B ganhou a jogada, começa jogando na próxima Rodada.
         }
 
-      escreva("\nA carta ", maoJogadorB[escolhaDaCarta - 1], " está na mesa!\n")
-      pontosJogadorB = pontosJogadorB + obterPontosDaCarta(maoJogadorB[escolhaDaCarta - 1])
-      maoJogadorB[escolhaDaCarta - 1] = "      " // marca a carta como jogada.
-      cartasRestantesJogadorB-- // diminui uma carta da mão do jogador A, para garantir que o looping termine quando todos jogadores estiverem sem cartas na mão.
+        se(pontosJogadorA > pontosJogadorB){
+          escreva("\nO jogador A venceu a Rodada!\n\n")
+          terminarPartida++
+          jogada = falso
+        }senao{
+          escreva("\nO jogador B venceu a Rodada!\n\n")
+          terminarPartida++
+          jogada = falso
+        }
 
-
-      vezDeJogar = verdadeiro
-
+        se(partidasGanhasJogadorA >= 2){
+          partidasGanhasJogadorA ++
+          escreva("Jogador A venceu a Partida!! \n\n")
+          //iniciaJogada = verdadeiro // Jogador A ganhou a jogada, começa jogando na próxima Partida.
+        }senao{
+          partidasGanhasJogadorB ++
+          escreva("Jogador B venceu a Partida!! \n\n")
+          //iniciaJogada = falso // Jogador B ganhou a jogada, começa jogando na próxima Partida.
+        }
       }
-    }
-
+    }   
   }
 
   funcao menuInicial(){
@@ -89,10 +143,10 @@ programa {
         caso 1: 
           escreva("Iniciando a partida...\n")
 
-          escreva("1. Receber as cartas.\n2. Ver pontuação.\n")
+          escreva("1. Receber as cartas.\n2. Ver pontuaÃ§Ã£o.\n")
           leia(menu)
 
-          //Com este escolha o usuário pode escolher entre ver sua mão de cartas ou ver sua pontuação.
+          //Com este escolha o usuÃ¡rio pode escolher entre ver sua mÃ£o de cartas ou ver sua pontuaÃ§Ã£o.
           escolha(menu){
             caso 1: 
              jogadas(maoJogadorA, maoJogadorB)
@@ -100,13 +154,15 @@ programa {
 
             caso 2:
               atribuirPontos()
-              escreva("Pontos do jogador A: ", pontosJogadorA, "\n")
-              escreva("Pontos do jogador B: ", pontosJogadorB, "\n")
-              
+              escreva("Pontuação final:\n")
+              escreva("Jogador A: ", partidasGanhasJogadorA, " rodada(s) vencida(s).\n")
+              escreva("Jogador B: ", partidasGanhasJogadorB, " rodada(s) vencida(s).\n\n")
+              partidasGanhasJogadorA = 0
+              partidasGanhasJogadorB = 0
             pare
 
             caso contrario:
-              escreva("Opção inválida!\n\n")
+              escreva("OpÃ§Ã£o invÃ¡lida!\n\n")
           } 
         pare
 
@@ -115,12 +171,12 @@ programa {
         pare
 
         caso contrario:
-          escreva("Opção inválida!\n\n")
+          escreva("OpÃ§Ã£o invÃ¡lida!\n\n")
       }
     }enquanto(num != 0)
   }
   
-  //Função para exibição do layout do titulo no menu principal.
+  //FunÃ§Ã£o para exibiÃ§Ã£o do layout do titulo no menu principal.
   funcao exibirTituloVisual(){
     escreva(" ########   ######   ##    ##    ####    #####              ####     ##     ##   ##    ####   ##   ##   #####\n")
     escreva(" #  ##  #   ##  ##   ##    ##   ##  ##  ##   ##            ##  ##   ####    ##   ##   ##  ##  ##   ##  ##   ##\n")
@@ -134,39 +190,10 @@ programa {
     u.aguarde(500)
   }
   
-  //Função para a exibição de layout visual do jogo da mão dos Player.
-  // funcao exibirVisualMao(){
-  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                            %&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						%&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&                                 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&&&&  ..                             						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&&&..ˎˎ.                             					&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&&&..*ˎ.ˎ/)*ˎ.                                      %&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&ˎ.....*))*ˎ.                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&#....ˎ/)*ˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&&....ˎˎ/#ˎˎ.&                                       %&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&&&...ˎ*/)#...&&                        	  						%&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&&#...ˎ*/)//.&&&&                      		  						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&&&....ˎ//)))&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&&&....ˎ*//))&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&&&....ˎˎ///))&&&&&&&&&                          	 						&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&&&&&....ˎˎ**/))&&&&&&&&&&&                                       &&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&)#&...*ˎ./)/#))&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  //  escreva( "&&&.....ˎˎˎ*/))#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n")
-  // }
-  
-  //função para inicializar o baralho para a distribuição das cartas para os jogadores A e B.
+  //funÃ§Ã£o para inicializar o baralho para a distribuiÃ§Ã£o das cartas para os jogadores A e B.
   funcao inicializarBaralho(){
-    //Definição das 40 cartas do baralho com os 4 naipes.
-    //Definição dos espaços dos vetores para o naipe paus.
+    //DefiniÃ§Ã£o das 40 cartas do baralho com os 4 naipes.
+    //DefiniÃ§Ã£o dos espaÃ§os dos vetores para o naipe paus.
     cartasBaralho[0] = "4 de Paus"// - 28 pontos
     cartasBaralho[1] = "5 de Paus"// - 29 pontos
     cartasBaralho[2] = "6 de Paus"// - 30 pontos
@@ -177,7 +204,7 @@ programa {
     cartasBaralho[7] = "1 de Paus"// - 39 pontos
     cartasBaralho[8] = "2 de Paus"// - 36 pontos
     cartasBaralho[9] = "3 de Paus"// - 37 pontos
-    //Definição dos espaços dos vetores para o naipe Copa.    
+    //DefiniÃ§Ã£o dos espaÃ§os dos vetores para o naipe Copa.    
     cartasBaralho[10] = "4 de Copa"//- 28 pontos
     cartasBaralho[11] = "5 de Copa"//- 29 pontos
     cartasBaralho[12] = "6 de Copa"//- 30 pontos
@@ -188,7 +215,7 @@ programa {
     cartasBaralho[17] = "1 de Copa"//- 35 pontos
     cartasBaralho[18] = "2 de Copa"//- 36 pontos
     cartasBaralho[19] = "3 de Copa"//- 37 pontos
-    //Definição dos espaços dos vetores para o naipe Espada.   
+    //DefiniÃ§Ã£o dos espaÃ§os dos vetores para o naipe Espada.   
     cartasBaralho[20] = "4 de Espada"//- 28 pontos
     cartasBaralho[21] = "5 de Espada"//- 29 pontos
     cartasBaralho[22] = "6 de Espada"//- 30 pontos
@@ -199,7 +226,7 @@ programa {
     cartasBaralho[27] = "1 de Espada"//- 40 pontos
     cartasBaralho[28] = "2 de Espada"//- 36 pontos
     cartasBaralho[29] = "3 de Espada"//- 37 pontos
-    //Definição dos espaços dos vetores para o naipe Ouro.  
+    //DefiniÃ§Ã£o dos espaÃ§os dos vetores para o naipe Ouro.  
     cartasBaralho[30] = "4 de Ouro"// - 28 pontos
     cartasBaralho[31] = "5 de Ouro"// - 29 pontos
     cartasBaralho[32] = "6 de Ouro"//- 30 pontos
@@ -212,7 +239,7 @@ programa {
     cartasBaralho[39] = "3 de Ouro"//- 37 pontos
   }
 
-  //função para atribuir valor de tipo inteiro ao vetor de uma string.
+  //funÃ§Ã£o para atribuir valor de tipo inteiro ao vetor de uma string.
   funcao atribuirPontos (){
 
     pontosCartas[0] = 28
@@ -266,7 +293,7 @@ programa {
     retorne 0
   }
 
-  //função para distribuição das cartasBaralho para os jogadores, sem destribuir para mãos que já possuem cartas.
+  //funÃ§Ã£o para distribuiÃ§Ã£o das cartasBaralho para os jogadores, sem destribuir para mÃ£os que jÃ¡ possuem cartas.
  funcao destribuirCartas(cadeia maoJogador[] ){
   inicializarBaralho()
   inteiro carta_sorteada
@@ -275,10 +302,10 @@ programa {
     para(inteiro i=0; i<3; i++){
       carta_sorteada = u.sorteia(0, 39)
       se(repitacaoCarta[carta_sorteada]==verdadeiro){
-        // Se a carta já foi sorteada, tenta novamente.
+        // Se a carta jÃ¡ foi sorteada, tenta novamente.
         i--
       }senao{
-        // Atribui o nome da carta ao vetor de mão do jogador.
+        // Atribui o nome da carta ao vetor de mÃ£o do jogador.
         maoJogador[i] = cartasBaralho[carta_sorteada]
         repitacaoCarta[carta_sorteada] = verdadeiro
       }
